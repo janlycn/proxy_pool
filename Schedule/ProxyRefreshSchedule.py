@@ -61,6 +61,7 @@ class ProxyRefreshSchedule(ProxyManager):
                 self.db.put(raw_proxy)
                 # self.log.info('ProxyRefreshSchedule: %s validation pass' % raw_proxy)
             else:
+                pass
                 # self.log.info('ProxyRefreshSchedule: %s validation fail' % raw_proxy)
             self.db.changeTable(self.raw_proxy_queue)
             raw_proxy_item = self.db.pop()
