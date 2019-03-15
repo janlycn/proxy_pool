@@ -12,11 +12,9 @@
 """
 __author__ = 'JHao'
 
-import sys
 from getFreeProxy import GetFreeProxy
 from Util.utilFunction import verifyProxyFormat
 
-sys.path.append('../')
 
 from Util.LogHandler import LogHandler
 
@@ -62,7 +60,7 @@ class CheckProxy(object):
         count = 0
         for proxy in func():
             if verifyProxyFormat(proxy):
-                log.info("fetch proxy: {}".format(proxy))
+                log.info("{} fetch proxy: {}".format(func_name, proxy))
                 count += 1
         log.info("{n} completed, fetch proxy number: {c}".format(n=func_name, c=count))
 

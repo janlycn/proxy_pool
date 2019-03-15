@@ -2,13 +2,13 @@
 # !/usr/bin/env python
 """
 -------------------------------------------------
-   File Name：     ProxyManager.py  
-   Description :  
+   File Name：     ProxyManager.py
+   Description :
    Author :       JHao
    date：          2016/12/3
 -------------------------------------------------
    Change Activity:
-                   2016/12/3: 
+                   2016/12/3:
 -------------------------------------------------
 """
 __author__ = 'JHao'
@@ -17,7 +17,7 @@ import random
 
 from Util import EnvUtil
 from DB.DbClient import DbClient
-from Util.GetConfig import GetConfig
+from Config.ConfigGetter import config
 from Util.LogHandler import LogHandler
 from Util.utilFunction import verifyProxyFormat
 from ProxyGetter.getFreeProxy import GetFreeProxy
@@ -30,40 +30,31 @@ class ProxyManager(object):
 
     def __init__(self):
         self.db = DbClient()
-        self.config = GetConfig()
         self.raw_proxy_queue = 'raw_proxy'
         self.log = LogHandler('proxy_manager')
         self.useful_proxy_queue = 'useful_proxy'
 
     def refresh(self):
         """
-        fetch proxy into Db by ProxyGetter
+        fetch proxy into Db by ProxyGetter/getFreeProxy.py
         :return:
         """
-        for proxyGetter in self.config.proxy_getter_functions:
+        self.db.changeTable(self.raw_proxy_queue)
+        for proxyGetter in config.proxy_getter_functions:
             # fetch
-            proxy_set = set()
             try:
                 self.log.info("{func}: fetch proxy start".format(func=proxyGetter))
-                proxy_iter = [_ for _ in getattr(GetFreeProxy, proxyGetter.strip())()]
+                for proxy in getattr(GetFreeProxy, proxyGetter.strip())():
+                    # 直接存储代理, 不用在代码中排重, hash 结构本身具有排重功能
+                    proxy = proxy.strip()
+                    if proxy and verifyProxyFormat(proxy):
+                        self.log.info('{func}: fetch proxy {proxy}'.format(func=proxyGetter, proxy=proxy))
+                        self.db.put(proxy)
+                    else:
+                        self.log.error('{func}: fetch proxy {proxy} error'.format(func=proxyGetter, proxy=proxy))
             except Exception as e:
                 self.log.error("{func}: fetch proxy fail".format(func=proxyGetter))
                 continue
-            for proxy in proxy_iter:
-                proxy = proxy.strip()
-                if proxy and verifyProxyFormat(proxy):
-                    self.log.info('{func}: fetch proxy {proxy}'.format(func=proxyGetter, proxy=proxy))
-                    proxy_set.add(proxy)
-                else:
-                    self.log.error('{func}: fetch proxy {proxy} error'.format(func=proxyGetter, proxy=proxy))
-
-            # store
-            for proxy in proxy_set:
-                self.db.changeTable(self.useful_proxy_queue)
-                if self.db.exists(proxy):
-                    continue
-                self.db.changeTable(self.raw_proxy_queue)
-                self.db.put(proxy)
 
     def get(self):
         """
