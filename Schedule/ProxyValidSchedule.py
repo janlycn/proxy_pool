@@ -56,8 +56,8 @@ class ProxyValidSchedule(ProxyManager, object):
                 self.log.info("Start valid useful proxy")
                 self.__validProxy()
             else:
-                self.log.info('Valid Complete! sleep 60 sec.')
-                time.sleep(60)
+                self.log.info('Valid Complete! sleep 20 sec.')
+                time.sleep(20)
                 self.putQueue()
 
     def putQueue(self):

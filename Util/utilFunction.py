@@ -112,8 +112,8 @@ def validUsefulProxy(proxy):
         #     r = requests.get('https://www.baidu.com/', proxies=proxies, timeout=10, verify=False)
         #     if r.status_code == 200:
         #         return True
-        r = requests.get('https://www.baidu.com/', proxies=proxies, timeout=10, verify=False)
-        if r.status_code == 200:
+        r = requests.get('http://www.baidu.com/', proxies=proxies, timeout=10, verify=False, allow_redirects=False)
+        if r.status_code == 302:
             return True
 
     except Exception as e:
