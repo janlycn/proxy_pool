@@ -20,7 +20,7 @@ class MongodbClient(object):
     def __init__(self, name, host, port):
         self.name = name
         self.client = MongoClient(host, port)
-        self.db = self.client.proxy
+        self.db = self.client.xinenseo
 
     def changeTable(self, name):
         self.name = name

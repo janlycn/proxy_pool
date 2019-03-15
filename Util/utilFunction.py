@@ -96,13 +96,27 @@ def validUsefulProxy(proxy):
     """
     if isinstance(proxy, bytes):
         proxy = proxy.decode('utf8')
-    proxies = {"http": "http://{proxy}".format(proxy=proxy)}
+    proxies = {"https": "http://{proxy}".format(proxy=proxy)}
     try:
         # 超过20秒的代理就不要了
-        r = requests.get('http://httpbin.org/ip', proxies=proxies, timeout=10, verify=False)
+        r = requests.get('https://httpbin.org/ip', proxies=proxies, timeout=7, verify=False)
+        isOk = True
         if r.status_code == 200:
-            # logger.info('%s is ok' % proxy)
+            #只要高匿IP
+            ips = r.json().get("origin", "").split(', ')
+            proxyIp = proxy.split(":")[0]
+            isOk = len(ips) > 0
+            for ip in ips:
+                if ip != proxyIp:
+                    isOk = False
+                    break
+        if not isOk:
+            return False
+
+        r = requests.get('https://www.baidu.com/', proxies=proxies, timeout=7, verify=False)
+        if r.status_code == 200:
             return True
+
     except Exception as e:
         # logger.error(str(e))
         return False

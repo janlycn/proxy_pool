@@ -74,10 +74,7 @@ def refreshPool():
 
 
 def main(process_num=30):
-    p = ProxyRefreshSchedule()
-
-    # 获取新代理
-    p.refresh()
+   
 
     # 检验新代理
     pl = []
@@ -91,6 +88,11 @@ def main(process_num=30):
 
     for num in range(process_num):
         pl[num].join()
+
+    p = ProxyRefreshSchedule()
+
+    # 获取新代理
+    p.refresh()
 
 
 def run():
