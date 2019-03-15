@@ -99,7 +99,7 @@ def validUsefulProxy(proxy):
     proxies = {"https": "http://{proxy}".format(proxy=proxy)}
     try:
         # 超过20秒的代理就不要了
-        r = requests.get('https://httpbin.org/ip', proxies=proxies, timeout=7, verify=False)
+        r = requests.get('https://httpbin.org/ip', proxies=proxies, timeout=10, verify=False)
         origin = r.json().get("origin")
         if r.status_code == 200 and origin:
             #只要高匿IP
@@ -109,7 +109,7 @@ def validUsefulProxy(proxy):
                 if ip != proxyIp:
                     return False
 
-            r = requests.get('https://www.baidu.com/', proxies=proxies, timeout=7, verify=False)
+            r = requests.get('https://www.baidu.com/', proxies=proxies, timeout=10, verify=False)
             if r.status_code == 200:
                 return True
 
