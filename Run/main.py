@@ -17,6 +17,7 @@ from multiprocessing import Process
 
 sys.path.append('.')
 sys.path.append('..')
+sys.path.append('/root/proxy_pool')
 
 from Api.ProxyApi import run as ProxyApiRun
 from Schedule.ProxyValidSchedule import run as ValidRun
