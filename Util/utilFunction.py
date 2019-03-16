@@ -108,11 +108,10 @@ def validUsefulProxy(proxy):
             for ip in ips:
                 if ip != proxyIp:
                     return False
-            return True
-
-        #     r = requests.get('https://www.baidu.com/', proxies=proxies, timeout=10, verify=False)
-        #     if r.status_code == 200:
-        #         return True
+            # return True
+            r = requests.get('https://www.baidu.com/', proxies=proxies, timeout=10, verify=False)
+            if r.status_code == 200:
+                return True
         # r = requests.get('http://www.baidu.com/', proxies=proxies, timeout=10, verify=False, allow_redirects=False, headers={
         #                  'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_3) AppleWebKit/537.36 (KHTML, like Gecko)', })
         # if r.status_code == 200:
