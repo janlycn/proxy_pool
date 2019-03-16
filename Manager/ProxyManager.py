@@ -51,6 +51,7 @@ class ProxyManager(object):
                         # self.log.info('{func}: fetch proxy {proxy}'.format(func=proxyGetter, proxy=proxy))
                         self.db.put(proxy)
                     else:
+                        pass
                         # self.log.error('{func}: fetch proxy {proxy} error'.format(func=proxyGetter, proxy=proxy))
             except Exception as e:
                 # self.log.error("{func}: fetch proxy fail".format(func=proxyGetter))
