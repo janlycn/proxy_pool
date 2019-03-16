@@ -18,7 +18,7 @@ from lxml import etree
 from Util.LogHandler import LogHandler
 from Util.WebRequest import WebRequest
 
-# logger = LogHandler(__name__, stream=False)
+logger = LogHandler(__name__)
 
 
 # noinspection PyPep8Naming
@@ -113,6 +113,7 @@ def validUsefulProxy(proxy):
         #     if r.status_code == 200:
         #         return True
         r = requests.get('http://www.baidu.com/', proxies=proxies, timeout=10, verify=False, allow_redirects=False)
+        logger.info(r.status_code)
         if r.status_code == 302:
             return True
 
